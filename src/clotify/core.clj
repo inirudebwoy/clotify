@@ -1,7 +1,7 @@
 (ns clotify.core
   (:require [liberator.core :refer [resource defresource]]
             [ring.middleware.params :refer [wrap-params]]
-            [compojure.core :refer [defroutes ANY]]))
+            [compojure.core :refer [defroutes context GET POST]]))
 
 ;; routes
 ;; GET current track
@@ -10,11 +10,12 @@
 ;; POST skip currently running track
 
 (defroutes app
-  (ANY "/" [] (resource :available-media-types ["text/html"]
+  (context "/playlist" []
+  (GET "/" [] (resource :available-media-types ["text/html"]
                         :handle-ok "<html>Hola</html>"))
-  (GET "/all" [] (str "this is list of all tracks")))
-  ;; (POST "/" [] (str "you have added new track to list"))
-  ;; (POST "/skip" [] (str "you have skipped a track")))
+  (GET "/all" [] (str "this is list of all tracks"))
+  (POST "/" [] (str "you have added new track to list"))
+  (POST "/skip" [] (str "you have skipped a track"))))
 
 (def handler
   (-> app

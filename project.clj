@@ -1,5 +1,5 @@
 (defproject clotify "0.1.0-SNAPSHOT"
-  :plugins [[lein-ring "0.8.11"]]
+  :plugins [[lein-ring "0.9.7"]]
   :ring {:handler clotify.core/handler}
   :description "Spotify REST client"
   :url "https://github.com/inirudebwoy/clotify"

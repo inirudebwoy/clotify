@@ -4,18 +4,29 @@
             [compojure.core :refer [defroutes context GET POST]]))
 
 ;; routes
-;; GET current track
 ;; GET all tracks in current playlist
+(defresource playlist [id]
+  :available-media-types ["application/json"]
+  :handle-ok (format "Track list for playlist: %s" id)
+  :authorized? (fn [_] "Not authorized"))
+
 ;; POST new track to end of playlist
+(defresource playlist-add []
+  :allowed-methods [:post]
+  :available-media-types ["application/json"]
+  :handle-ok "You have added track to playlist")
+
 ;; POST skip currently running track
+(defresource playlist-skip []
+  :allowed-methods [:post]
+  :available-media-types ["application/json"]
+  :handle-ok "You have skipped a track.")
 
 (defroutes app
   (context "/playlist" []
-  (GET "/" [] (resource :available-media-types ["text/html"]
-                        :handle-ok "<html>Hola</html>"))
-  (GET "/all" [] (str "this is list of all tracks"))
-  (POST "/" [] (str "you have added new track to list"))
-  (POST "/skip" [] (str "you have skipped a track"))))
+           (POST "/" [] (fn [_] (playlist-add)))
+           (GET "/:id" [id] (playlist id))
+           (POST "/skip" [] (playlist-skip))))
 
 (def handler
   (-> app

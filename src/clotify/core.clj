@@ -1,16 +1,14 @@
 (ns clotify.core
-  (:require [clotify.spotify :refer [playlist-tracks]]
+  (:require [clotify.playlist :refer [tracks]]
             [liberator.core :refer [resource defresource]]
             [liberator.representation :refer [as-response]]
             [ring.middleware.params :refer [wrap-params]]
             [compojure.core :refer [defroutes context GET POST]]))
 
 ;; retrieve tracks in form of map and manipulate it maybe?
-(defn get-playlist-tracks [id] (playlist-tracks id))
+(defn get-playlist-tracks [id] (tracks id))
 
 (defn add-playlist-track [track] (format "You have added: %s" track))
-
-(defn skip-playlist-track [] (str "You have skipped a track."))
 
 ;;; routes
 ;; GET all tracks in current playlist
@@ -29,17 +27,10 @@
                      (assoc-in [:headers "X-Response-Type"] "SUCCESS")
                      (assoc :body (add-playlist-track ((ctx :request) :params))))))
 
-;; POST skip currently running track
-(defresource playlist-skip []
-  :allowed-methods [:post]
-  :available-media-types ["application/json"]
-  :handle-ok (skip-playlist-track))
-
 (defroutes app
   (context "/playlist" []
            (POST "/" [] (fn [_] (playlist-add)))
-           (GET "/:id" [id] (playlist id))
-           (POST "/skip" [] (playlist-skip))))
+           (GET "/:id" [id] (playlist id))))
 
 (def handler
   (-> app

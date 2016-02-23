@@ -1,5 +1,5 @@
 (ns clotify.core
-  (:require [clotify.playlist :refer [tracks]]
+  (:require [clotify.playlist :refer [tracks add-track]]
             [liberator.core :refer [resource defresource]]
             [liberator.representation :refer [as-response]]
             [ring.middleware.params :refer [wrap-params]]
@@ -8,7 +8,7 @@
 ;; retrieve tracks in form of map and manipulate it maybe?
 (defn get-playlist-tracks [id] (tracks id))
 
-(defn add-playlist-track [track] (format "You have added: %s" track))
+(defn add-playlist-track [track] (add-track track))
 
 ;;; routes
 ;; GET all tracks in current playlist

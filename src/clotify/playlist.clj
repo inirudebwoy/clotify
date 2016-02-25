@@ -13,4 +13,5 @@
 ;; real function calling mocks
 (defn tracks [id] spotify-playlist-tracks-stub)
 
-(defn add-track [track] (str (update-items spotify-playlist-tracks-stub)))
+;(defn add-track [track] (str (update-items spotify-playlist-tracks-stub)))
+(defn add-track [track] (str track))
